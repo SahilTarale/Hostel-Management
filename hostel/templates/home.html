@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+    {% block content %}
+      
+        <a href="{% url 'form' %}"><button type="submit button"  class="btn btn-dark btn-lg applicationButton"> Application form  </button> </a>
+        
+        <a href="{% url 'admin_login' %}"> <button type="submit button"  class="btn btn-dark btn-lg applicationButton" > Admin Login  </button></a>
+   
+    {% endblock %}
+

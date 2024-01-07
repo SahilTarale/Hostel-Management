@@ -1,0 +1,11 @@
+
+{% extends 'base.html' %}
+    {% block content %}
+
+        <h1>Application Accepted</h1>
+        {% for student in student_application %}
+        <p>Congratulations, the application for {{ student.student_name }} has been accepted!</p>
+        {% endfor %}
+
+    {% endblock %}
+

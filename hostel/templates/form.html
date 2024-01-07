@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+
+    {% block content %}
+      
+    
+      <div class="ApplicationForm">
+        <div class="card  mb-3 f" style="max-width: 78rem; ">
+          <div class="card border-dark mb-3" style="max-width: 78rem;">
+              <div class="card-header">Application Form </div>
+              <div class="card-body text-dark">
+                  <form  action="{% url 'application_submit' %}" method="POST">
+
+                    {% csrf_token %}
+
+                     <!-- Preview Section -->
+                        <div id="previewSection" style="display: none;">
+                          <h4>Application Preview</h4>
+                          <hr>
+                          <dl class="row">
+                            <dt class="col-sm-3">Student ID:</dt>
+                            <dd class="col-sm-9" id="previewID"></dd>
+
+                            <dt class="col-sm-3">Student Name:</dt>
+                            <dd class="col-sm-9" id="previewName"></dd>
+                            
+                            <dt class="col-sm-3">Age:</dt>
+                            <dd class="col-sm-9" id="previewAge"></dd>
+
+                            <dt class="col-sm-3">Email:</dt>
+                            <dd class="col-sm-9" id="previewEmail"></dd>
+
+                            <dt class="col-sm-3">Phone:</dt>
+                            <dd class="col-sm-9" id="previewPhone"></dd>
+
+                            <dt class="col-sm-3">Year :</dt>
+                            <dd class="col-sm-9" id="previewYear"></dd>
+
+                            <dt class="col-sm-3">Current Semester:</dt>
+                            <dd class="col-sm-9" id="previewSemester"></dd>
+
+                            <dt class="col-sm-3">Branch:</dt>
+                            <dd class="col-sm-9" id="previewBranch"></dd>
+                            
+                            <dt class="col-sm-3">Address:</dt>
+                            <dd class="col-sm-9" id="previewAddress"></dd>
+
+                            <dt class="col-sm-3">City:</dt>
+                            <dd class="col-sm-9" id="previewCity"></dd>
+
+                            <dt class="col-sm-3">State:</dt>
+                            <dd class="col-sm-9" id="previewState"></dd>
+
+                            <dt class="col-sm-3">Hostel Name:</dt>
+                            <dd class="col-sm-9" id="previewHostel"></dd>
+
+                            <dt class="col-sm-3">Hostel Start Date:</dt>
+                            <dd class="col-sm-9" id="previewStartDate"></dd>
+
+                            <dt class="col-sm-3">Hostel End Date:</dt>
+                            <dd class="col-sm-9" id="previewEndDate"></dd>
+
+
+
+                            
+                          </dl>
+                          <button type="button" class="btn btn-secondary" onclick="togglePreview()"> Back </button>
+                          
+                      </div>
+                      <!-- End Preview Section -->
+                      <div id="formSection">
+                        <div class="form-row" >                        
+                            <div class="form-group col-md-3">
+                              <label for="inputName">Full Name  </label>
+                              <input type="text"  class="form-control" name="student_name" id="student_name" placeholder="Student full name" required>
+                            </div>
+                            <div class="form-group col-md-3">
+                              <label for="inputID">Student ID no. </label>
+                              <input type="number" class="form-control" name="student_id" id="student_id" min="1" placeholder="Roll No." required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label for="inputYear">Student Year </label>
+                                    <select id="student_year" name="student_year" class="form-control" required>
+                                        <option selected>Choose...</option>
+                                        <option> 1st year </option>
+                                        <option> 2nd year</option>
+                                        <option> 3rd year</option>
+                                        <option> 4th year</option>
+                                    </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                              <label for="inputSem">Current Semester</label>
+                              <input type="number" name="student_semester" id="student_semester" class="form-control" min="1"  placeholder="semester" required>
+                            </div>
+                            <div class="form-group col-md-3">
+                              <label for="inputBranch">Branch</label>
+                              <input type="text" name="student_branch" id="student_branch" class="form-control"  placeholder="Branch name" required>
+                            </div>
+                          </div>
+                
+                        <div class="form-row">
+                          <div class="form-group col-md-3">
+                            <label for="inputEmail4">Email Id</label>
+                            <input type="email" name="student_email" class="form-control" id="student_email" placeholder="Email" required>
+                          </div>
+                          <div class="form-group col-md-3">
+                            <label for="inputPassword4">Phone number</label>
+                            <input type="text" name="student_phone"class="form-control" id="student_phone" placeholder="Phone number" required>
+                          </div>
+                          <div class="form-group col-md-3">
+                            <label for="inputAge">Age</label>
+                            <input type="number" name="student_age" class="form-control" id="student_age" min="16" placeholder="age" required>
+                          </div>
+                        </div>
+
+
+                        <div class="form-group">
+                          <label for="inputAddress">Address</label>
+                          <input type="text" name="student_address" class="form-control" id="student_address" placeholder="1234 Main St" required>
+                        </div>
+                      
+                        <div class="form-row">
+                          <div class="form-group col-md-3">
+                            <label for="inputCity">City</label>
+                            <input type="text" name="student_city" class="form-control" id="student_city" required>
+                          </div>
+                        
+                          <div class="form-group col-md-2">
+                            <label for="inputZip">state</label>
+                            <input type="text" class="form-control" name="student_state" id="student_state" required>
+                          </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="inputState">Hostel </label>
+                                <select id="student_hostel" name="student_hostel" class="form-control" required>
+                                  <option selected>Choose...</option>
+
+                                  {% for hostel in hostels %}
+                                    {% if hostel.no_of_vacancy == 0 %}
+                                      <option disabled>{{hostel.hostel_name}} </option>                                   
+                                    {% else %}
+                                      <option >{{hostel.hostel_name}} </option>
+                                    {% endif %}
+                                  {% endfor %}
+
+                                  <!-- <option>Hostel A</option>
+                                  <option>Hostel B</option>
+                                  <option>Hostel C</option> -->
+                                </select>
+                                
+                            </div>
+                        </div>
+
+                        <div class="form-row">                        
+                            <div class="form-group col-md-3">
+                              <label for="inputDate">Hostel Start Date  </label>
+                              <input type="date" id="student_start_date" name="student_start_date" class="form-control" min="" placeholder="yy-mm-dd" required>
+                            </div>
+                            <div class="form-group col-md-3">
+                              <label for="inputDate">Hostel End Date </label>
+                              <input type="date" id="student_end_date" name="student_end_date" class="form-control" min="" placeholder="yy-mm-dd" required>
+                            </div>
+                        </div>
+                      
+                        <button type="button" class="btn btn-primary previewButton" onclick="previewApplication()">Preview Application</button>
+                        <button type="submit" class="btn btn-dark btn-lg submitButton">Submit</button>
+                      </div>
+                  </form>
+
+
+                  <script>
+                      const currentDate = new Date();
+              
+                      const year = currentDate.getFullYear();
+                      const day = String(currentDate.getDate()).padStart(2, '0');
+                      const month = String(currentDate.getMonth()+1 ).padStart(2, '0'); 
+                  
+                      const formattedDate = `${year}-${month}-${day}`;
+                      document.getElementById('student_start_date').setAttribute('min', formattedDate);
+                    document.getElementById('student_end_date').setAttribute('min', formattedDate);
+
+
+
+                    function previewApplication() {
+                      document.getElementById('previewID').textContent = document.getElementById('student_id').value;
+                      document.getElementById('previewName').textContent = document.getElementById('student_name').value;
+                      document.getElementById('previewEmail').textContent = document.getElementById('student_email').value;
+                      document.getElementById('previewYear').textContent = document.getElementById('student_year').value;
+                      document.getElementById('previewSemester').textContent = document.getElementById('student_semester').value;
+                      document.getElementById('previewAge').textContent = document.getElementById('student_age').value;
+                      document.getElementById('previewBranch').textContent = document.getElementById('student_branch').value;
+                      document.getElementById('previewPhone').textContent = document.getElementById('student_phone').value;
+                      document.getElementById('previewHostel').textContent = document.getElementById('student_hostel').value;
+                      document.getElementById('previewStartDate').textContent = document.getElementById('student_start_date').value;
+                      document.getElementById('previewEndDate').textContent = document.getElementById('student_end_date').value;
+                      document.getElementById('previewAddress').textContent = document.getElementById('student_address').value;
+                      document.getElementById('previewCity').textContent = document.getElementById('student_city').value;
+                      document.getElementById('previewState').textContent = document.getElementById('student_state').value;
+
+
+                      toggleSections();
+                  }
+          
+                  function toggleSections() {
+                      document.getElementById('formSection').style.display = 'none';
+                      document.getElementById('previewSection').style.display = 'block';
+                  }
+          
+                  function togglePreview() {
+                      document.getElementById('formSection').style.display = 'block';
+                      document.getElementById('previewSection').style.display = 'none';
+                  }
+                </script>
+              
+          </div>
+        </div>
+      </div>
+
+  {% endblock %}
