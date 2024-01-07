@@ -112,26 +112,53 @@
 
                         
                 {% endfor %}
+            </table>
+            <button type="submit" class="admin_page_data">Accept Selected Applications</button>
 
-                {% for student_alloted in student_alloteds %}
 
+        </form>
+
+        <h1 class="admin_page_data"> Student Allocation Expire </h1>
+        <form method="POST" action="{% url 'expire_allotement' %}">
+            
+            {% csrf_token %}
+            <table border="1" class="admin_page_data" >
                 <tr>
-                    <td>{{ student_alloted.student_id }}</td>
-                    <td>{{ student_alloted.student_name }}</td>
-                    <td>{{ student_alloted.student_email }}</td>
-                    <td>{{ student_alloted.student_application_status }}</td>
-                    <td>{{ student_alloted.hostel_name }}</td>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Application Status</th>
+                    <th>Hostel</th>
+                    <th>Action</th>
                 </tr>
 
+                {% for student_allocation_expire in student_allocation_expire %}
+
+                    <tr>
+                        <td>{{ student_allocation_expire.student_id }}</td>
+                        <td>{{ student_allocation_expire.student_name }}</td>
+                        <td>{{ student_allocation_expire.student_email }}</td>
+                        <td>{{ student_allocation_expire.student_application_status }}</td>
+                        <td>{{ student_allocation_expire.hostel_name }}</td>
+                    
+                        <td>
+                            <input type="checkbox" name="student_id" value="{{ student_allocation_expire.student_id }}">
+
+                            <select name="hostel_name">
+                                
+                                    <option value="{{ student_allocation_expire.hostel_name.hostel_name }}"> {{ student_allocation_expire.hostel_name.hostel_name }} </option>
+                            
+                            </select>
+                            
+                        </td>
+                    </tr>
+                
+
                 {% endfor %}
-
-
-
             </table>
 
-            
+            <button type="submit" class="admin_page_data"> Remove Students </button>
 
-            <button type="submit" class="admin_page_data">Accept Selected Applications</button>
         </form>
     </div>
 

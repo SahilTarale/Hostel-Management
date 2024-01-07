@@ -3,9 +3,9 @@
     {% block content %}
 
         <h1>Application Accepted</h1>
-        {% for student in student_application %}
-        <p>Congratulations, the application for {{ student.student_name }} has been accepted!</p>
-        {% endfor %}
+      
+        <p>Congratulations, the applications has been accepted!</p>
+        <a href="{% url 'home' %}"><button type="submit button"  class="btn btn-dark btn-lg applicationButton"> Home  </button> </a> 
 
     {% endblock %}
 

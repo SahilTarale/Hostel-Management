@@ -62,8 +62,6 @@ def application_submit(request) :
     return render(request, 'application_submit.html')
 
 
-
-
 #admin functionality
 
 
@@ -71,7 +69,17 @@ def application_submit(request) :
 def admin_page(request):
     student_applications = student.objects.filter(student_application_status='Applied')
     hostels = Hostel.objects.all()
-    return render(request, 'admin_page.html', {'student_applications': student_applications, 'hostels': hostels})
+    student_alloteds = student.objects.all()
+    
+    for student_alloted in student_alloteds:
+        if student_alloted.student_end_date < timezone.now().date():
+            student_alloted.student_application_status = 'expire'
+            student_alloted.save()
+
+    student_allocation_expire=student.objects.filter(student_application_status='expire')
+    return render(request, 'admin_page.html', {'student_applications': student_applications, 'hostels': hostels, 'student_allocation_expire': student_allocation_expire})
+
+
 
 def accept_applications(request):
     if request.method == 'POST':
@@ -116,15 +124,25 @@ def admin_login(request):
     return render(request, 'admin_login.html')
 
 
-def expire_allotment(request):
-    student_alloteds = student.objects.all()
-    
-    for student_alloted in student_alloteds:
-        if student_alloted.student_end_date < timezone.now().date():
-            student_alloted.student_application_status = 'expire'
-            student_alloted.save()
+def expire_allottment(request):
+    if request.method == 'POST':
+        student_ids = request.POST.getlist('student_id')
+        hostel_names = request.POST.getlist('hostel_name')
 
-    return render(request, 'admin_page.html')
+        for student_id, hostel_name in zip(student_ids, hostel_names):
+            alloted_students = get_object_or_404(student, pk=student_id)
+
+            hostel = get_object_or_404(Hostel, pk=hostel_name)            
+            hostel.no_of_vacancy += 1
+            hostel.no_of_students-=1
+            hostel.save()
+
+            # Delete the student record
+            alloted_students.delete()
+
+        return render(request, 'expire_allotment.html')
+
+    return render(request, 'admin_page.html', {'error_message': 'Invalid request'})
     
   
 
