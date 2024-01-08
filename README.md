@@ -1,5 +1,9 @@
 # Hostel Management System
 
+ - Hostel Management System is customize and user-friendly software for Hostel  and student .
+ - It manages student details, hostel allocation ,  track applications status and other hostel related activities.
+
+
 
 ## ScreenShot
  ### Home page
